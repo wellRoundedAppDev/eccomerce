@@ -1,3 +1,4 @@
+import 'package:ecommerce_flogics/constants/colors/colors.dart';
 import 'package:ecommerce_flogics/constants/font_sizes/font_sizes.dart';
 import 'package:ecommerce_flogics/providers/cart_provider.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,6 +20,24 @@ class CartScreen extends StatelessWidget {
           child: PrimaryButton(
               text: Strings.PROCEED_TO_CHECKOUT_ENG, action: () {
                 context.read<CartProvider>().calculateCartTotalPrice();
+                double totalPrice = context.read<CartProvider>().totalCartPrice;
+                showDialog(context: context, builder: (context){
+                 return AlertDialog(title: Text("Total Price"),
+                   actions: [
+
+                   GestureDetector(
+                     onTap: (){
+                       Navigator.pop(context);
+                     },
+                     child: Padding(
+                       padding: const EdgeInsets.all(8.0),
+                       child: Text("Buy",style: TextStyle(fontWeight: FontWeight.bold,fontSize: FontSizes.FONT_SIZE_22,color: AppColors.APP_MAIN_COLOR),),
+                     ),
+                   )
+                  ],content: Text(totalPrice.toString()),
+                 );
+                });
+
           }),
         ),
         body: Consumer<CartProvider>(
