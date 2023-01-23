@@ -1,7 +1,5 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
-import 'package:ecommerce_flogics/models/get_all_products_response.dart';
+import 'package:ecommerce_flogics/models/profile_response.dart';
 import 'package:ecommerce_flogics/models/user_login_input.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -9,13 +7,13 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import '../constants/server_urls/api_urls.dart';
 import '../models/login_api_response.dart';
 
-class ProductsApis {
-  ProductsApis._() {
+class ProfileApis {
+  ProfileApis._() {
     // Attach Logger
     if (kDebugMode) _dio.interceptors.add(_logger);
   }
 
-  static final ProductsApis instance = ProductsApis._();
+  static final ProfileApis instance = ProfileApis._();
 
   // Http Client
   final Dio _dio = Dio();
@@ -34,10 +32,11 @@ class ProductsApis {
     error: true,
   );
 
-  Future<List<ProductResponse>?> getAllProducts() async {
+  Future<ProfileResponse?> getUserProfile(
+      ) async {
     try {
       final _response = await _dio.get(
-        '${ApiUrls.BASIC_URL}${ApiUrls.GET_PRODUCTS_ENDPOINT}',
+        '${ApiUrls.BASIC_URL}${ApiUrls.GET_PROFILE_ENDPOINT}',
         options: Options(
           headers: {
             ..._apiHeaders,
@@ -47,38 +46,13 @@ class ProductsApis {
       if (_validResponse(
         _response.statusCode!,
       )) {
-
-        return getAllProductsResponseFromJson(        jsonEncode(_response.data)
-        );
-      }
-    } catch (e) {
-      print("Dio error: $e");
-    }
-  }
-
-  Future<ProductResponse?> getProduct(int productId) async {
-    try {
-      final _response = await _dio.get(
-        '${ApiUrls.BASIC_URL}${ApiUrls.GET_PRODUCTS_ENDPOINT}$productId',
-        options: Options(
-          headers: {
-            ..._apiHeaders,
-          },
-        ),
-      );
-      if (_validResponse(
-        _response.statusCode!,
-      )) {
-
         print(_response.data);
-        return ProductResponse.fromJson(_response.data);
+        return ProfileResponse.fromJson(_response.data);
       }
     } catch (e) {
       print("Dio error: $e");
     }
   }
-
-
 
   bool _validResponse(
       int statusCode,

@@ -1,9 +1,15 @@
 import 'package:ecommerce_flogics/constants/font_sizes/font_sizes.dart';
+import 'package:ecommerce_flogics/constants/paths/icon_paths.dart';
+import 'package:ecommerce_flogics/constants/paths/route_paths.dart';
+import 'package:ecommerce_flogics/providers/cart_provider.dart';
 import 'package:ecommerce_flogics/providers/products_provider.dart';
 import 'package:ecommerce_flogics/shared_widgets/primary_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+
+import '../constants/strings.dart';
 
 class ProductDetailsScreen extends StatelessWidget {
   const ProductDetailsScreen({Key? key}) : super(key: key);
@@ -14,7 +20,14 @@ class ProductDetailsScreen extends StatelessWidget {
       child: Scaffold(
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.only(left: 8,bottom: 8,right: 8),
-          child: PrimaryButton(text: "Add To Cart", action: () {}),
+          child: PrimaryButton(text: Strings.ADD_TO_CART_ENG, action: () {
+            var selectedProduct = context.read<ProductsProvider>().selectedProduct;
+            Map<String,dynamic> selectedProductMap = {
+              "product":selectedProduct,
+              "quantity":1
+            };
+            context.read<CartProvider>().addProductToCart(selectedProductMap,context);
+          }),
         ),
         body: Consumer<ProductsProvider>(
             builder: (context, productsProvider, child) {
@@ -41,14 +54,25 @@ class ProductDetailsScreen extends StatelessWidget {
                         Navigator.pop(context);
                       },
                       child: Padding(
-                          padding: EdgeInsets.all(8),
+                          padding: EdgeInsets.all(16),
                           child: Icon(
                             Icons.arrow_back_ios,
                             color: Colors.black,
                             size: 35,
                           )),
                     ),
-                    Spacer()
+
+                    Spacer(),
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.pushNamed(context, RoutePaths.CART_SCREEN_ROUTE_ID);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SvgPicture.asset(IconPaths.SHOPPING_CART_ICON,width: 40,height: 40,),
+                      ),
+                    )
+                 
                   ]),
               body: SingleChildScrollView(
                 child: Padding(

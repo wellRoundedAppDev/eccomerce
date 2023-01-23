@@ -1,3 +1,4 @@
+import 'package:ecommerce_flogics/constants/colors/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -18,7 +19,7 @@ class CustomNavigationBar extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(
             topRight: Radius.circular(20), topLeft: Radius.circular(30)),
-        color: Colors.white,
+        color: AppColors.APP_LIGHT_MAIN_COLOR,
       ),
       child:
           Consumer<NavigationProvider>(builder: (context, navService, child) {
@@ -31,7 +32,7 @@ class CustomNavigationBar extends StatelessWidget {
                 children: [
                   Center(
                     child: SvgPicture.asset(
-                      (selectedTab == 0)
+                      (selectedTab == 2)
                           ? IconPaths.HOME_FILLED_ICON
                           : IconPaths.HOME_ICON,
                       width: 30,
@@ -45,7 +46,7 @@ class CustomNavigationBar extends StatelessWidget {
                         onTap: () {
                           context
                               .read<NavigationProvider>()
-                              .setSelectedHomeScreenTab(0);
+                              .setSelectedHomeScreenTab(2);
                         },
                       ),
                     ),
@@ -85,9 +86,9 @@ class CustomNavigationBar extends StatelessWidget {
                 children: [
                   Center(
                     child: SvgPicture.asset(
-                      (selectedTab == 2)
-                          ? IconPaths.CART_FILLED_ICON
-                          : IconPaths.CART_ICON,
+                      (selectedTab == 0)
+                          ? IconPaths.SHOPPING_CART_FILLED_ICON
+                          : IconPaths.SHOPPING_CART_ICON,
                       width: 30,
                       height: 30,
                     ),
@@ -101,7 +102,7 @@ class CustomNavigationBar extends StatelessWidget {
 
                           context
                               .read<NavigationProvider>()
-                              .setSelectedHomeScreenTab(2);
+                              .setSelectedHomeScreenTab(0);
                         },
                       ),
                     ),

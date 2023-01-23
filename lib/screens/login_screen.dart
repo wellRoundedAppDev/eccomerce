@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import '../apis/authentication_apis.dart';
 import '../constants/paths/image_paths.dart';
 import '../constants/strings.dart';
+import '../providers/cart_provider.dart';
 import '../shared_widgets/custom_input.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -92,6 +93,8 @@ class LoginScreen extends StatelessWidget {
                       bool isSuccess =
                           await context.read<AuthProvider>().login(user);
                       if (isSuccess) {
+                        await context.read<CartProvider>().getUserCarts(context);
+
                         Navigator.pushReplacementNamed(
                             context, RoutePaths.HOME_SCREEN_ROUTE_ID);
                       } else {

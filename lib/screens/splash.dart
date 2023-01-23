@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../constants/colors/colors.dart';
 import '../constants/font_sizes/font_sizes.dart';
+import '../providers/cart_provider.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -19,9 +20,12 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+
     Future.delayed(
       Duration(seconds: 3),
       () {
+
         Navigator.pushReplacementNamed(context, RoutePaths.LOGIN_SCREEN_ROUTE_ID);
       }
     );

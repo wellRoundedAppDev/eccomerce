@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:ecommerce_flogics/models/get_all_products_response.dart';
+import 'package:ecommerce_flogics/models/user_cart_response.dart';
 import 'package:ecommerce_flogics/models/user_login_input.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -9,13 +10,13 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import '../constants/server_urls/api_urls.dart';
 import '../models/login_api_response.dart';
 
-class ProductsApis {
-  ProductsApis._() {
+class CartApis {
+  CartApis._() {
     // Attach Logger
     if (kDebugMode) _dio.interceptors.add(_logger);
   }
 
-  static final ProductsApis instance = ProductsApis._();
+  static final CartApis instance = CartApis._();
 
   // Http Client
   final Dio _dio = Dio();
@@ -34,10 +35,10 @@ class ProductsApis {
     error: true,
   );
 
-  Future<List<ProductResponse>?> getAllProducts() async {
+  Future<List<UserCartResponse>?> getUserCart() async {
     try {
       final _response = await _dio.get(
-        '${ApiUrls.BASIC_URL}${ApiUrls.GET_PRODUCTS_ENDPOINT}',
+        '${ApiUrls.BASIC_URL}${ApiUrls.GET_USER_CART_ENDPOINT}1',
         options: Options(
           headers: {
             ..._apiHeaders,
@@ -48,7 +49,7 @@ class ProductsApis {
         _response.statusCode!,
       )) {
 
-        return getAllProductsResponseFromJson(        jsonEncode(_response.data)
+        return userCartResponseFromJson(        jsonEncode(_response.data)
         );
       }
     } catch (e) {
@@ -56,10 +57,15 @@ class ProductsApis {
     }
   }
 
-  Future<ProductResponse?> getProduct(int productId) async {
+  Future<bool?> addProductToCart() async {
     try {
-      final _response = await _dio.get(
-        '${ApiUrls.BASIC_URL}${ApiUrls.GET_PRODUCTS_ENDPOINT}$productId',
+      final _response = await _dio.post(
+        '${ApiUrls.BASIC_URL}${ApiUrls.CART_ENDPOINT}',
+        data:  {
+          "userId":1,
+          "date":2020-02-03,
+          "products":[{"productId":5,"quantity":1},{"productId":1,"quantity":5}]
+        },
         options: Options(
           headers: {
             ..._apiHeaders,
@@ -69,15 +75,16 @@ class ProductsApis {
       if (_validResponse(
         _response.statusCode!,
       )) {
-
         print(_response.data);
-        return ProductResponse.fromJson(_response.data);
+        return true;
+      }else{
+        return false;
       }
     } catch (e) {
+
       print("Dio error: $e");
     }
   }
-
 
 
   bool _validResponse(

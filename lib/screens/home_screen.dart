@@ -1,7 +1,11 @@
 import 'package:ecommerce_flogics/apis/products_apis.dart';
 import 'package:ecommerce_flogics/providers/auth_provider.dart';
+import 'package:ecommerce_flogics/providers/cart_provider.dart';
 import 'package:ecommerce_flogics/providers/products_provider.dart';
+import 'package:ecommerce_flogics/providers/user_provider.dart';
+import 'package:ecommerce_flogics/screens/cart_screen.dart';
 import 'package:ecommerce_flogics/screens/products_screen.dart';
+import 'package:ecommerce_flogics/screens/profile_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -20,15 +24,18 @@ class HomeScreen extends StatelessWidget {
             bottomNavigationBar: CustomNavigationBar(),
             body: Consumer<NavigationProvider>(
                 builder: (context, navService, child) {
-                  if(navService.selectedHomeScreenTab == 0){
+                  if(navService.selectedHomeScreenTab == 2){
                     context.read<ProductsProvider>().getAllProducts();
+                  }else if(navService.selectedHomeScreenTab == 1) {
+                    context.read<UserProvider>().getUserProfile();
+                  }else if(navService.selectedHomeScreenTab == 0){
                   }
               return Center(
-                  child: (navService.selectedHomeScreenTab == 0)
+                  child: (navService.selectedHomeScreenTab == 2)
                       ? ProductsScreen()
                       : (navService.selectedHomeScreenTab == 1)
-                          ? Text("1")
-                          : Text("0"));
+                          ? ProfileScreen()
+                          : CartScreen());
             })));
   }
 }

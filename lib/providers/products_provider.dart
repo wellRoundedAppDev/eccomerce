@@ -14,11 +14,15 @@ class ProductsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  getSelectedProduct(int? id) async {
+  setSelectedProduct(int? id) async {
     if(id == null){
       return;
     }
     selectedProduct = await _productsApi.getProduct(id);
     notifyListeners();
+  }
+
+  Future<ProductResponse?> getProductById(int id) async {
+    return  await _productsApi.getProduct(id);
   }
 }

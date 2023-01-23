@@ -1,7 +1,10 @@
 import 'package:ecommerce_flogics/constants/paths/route_paths.dart';
 import 'package:ecommerce_flogics/providers/auth_provider.dart';
+import 'package:ecommerce_flogics/providers/cart_provider.dart';
 import 'package:ecommerce_flogics/providers/navigation_provider.dart';
 import 'package:ecommerce_flogics/providers/products_provider.dart';
+import 'package:ecommerce_flogics/providers/user_provider.dart';
+import 'package:ecommerce_flogics/screens/cart_screen.dart';
 import 'package:ecommerce_flogics/screens/home_screen.dart';
 import 'package:ecommerce_flogics/screens/login_screen.dart';
 import 'package:ecommerce_flogics/screens/product_details_screen.dart';
@@ -26,6 +29,8 @@ class MyApp extends StatelessWidget {
         Provider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => NavigationProvider()),
         ChangeNotifierProvider(create: (_) => ProductsProvider()),
+        ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => CartProvider()),
 
       ],
       child: MaterialApp(
@@ -39,8 +44,9 @@ class MyApp extends StatelessWidget {
           RoutePaths.HOME_SCREEN_ROUTE_ID: (context) => HomeScreen(),
           RoutePaths.PROFILE_SCREEN_ROUTE_ID: (context) => ProfileScreen(),
           RoutePaths.PRODUCTS_SCREEN_ROUTE_ID: (context) => ProductsScreen(),
-          RoutePaths.PRODUCT_DETAILS_SCREEN_ROUTE_ID: (context) => ProductDetailsScreen()
-
+          RoutePaths.PRODUCT_DETAILS_SCREEN_ROUTE_ID: (context) =>
+              ProductDetailsScreen(),
+          RoutePaths.CART_SCREEN_ROUTE_ID:(context)=>CartScreen()
         },
         home: SplashScreen(),
       ),

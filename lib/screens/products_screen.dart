@@ -38,7 +38,7 @@ class ProductsScreen extends StatelessWidget {
 
                           return GestureDetector(
                             onTap: () async {
-                              await context.read<ProductsProvider>().getSelectedProduct(product?.id);
+                              await context.read<ProductsProvider>().setSelectedProduct(product?.id);
                               Navigator.pushNamed(context, RoutePaths.PRODUCT_DETAILS_SCREEN_ROUTE_ID);
 
                             },
