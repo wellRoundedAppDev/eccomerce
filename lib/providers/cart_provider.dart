@@ -4,6 +4,7 @@ import 'package:ecommerce_flogics/models/user_cart_response.dart';
 import 'package:ecommerce_flogics/providers/products_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pay/pay.dart';
 import 'package:provider/provider.dart';
 
 class CartProvider extends ChangeNotifier {
@@ -11,6 +12,7 @@ class CartProvider extends ChangeNotifier {
   List<UserCartResponse>? userCarts = [];
   List<Map<String, dynamic>> productsInCart = [];
   double totalCartPrice = 0;
+  List<PaymentItem>? paymentItems;
 
   getUserCarts(BuildContext context) async {
     productsInCart.clear();
@@ -62,6 +64,14 @@ class CartProvider extends ChangeNotifier {
       totalCartPrice += element["product"].price * element["quantity"];
     });
     print(totalCartPrice);
+    notifyListeners();
+  }
+
+  createPaymentItems(){
+    paymentItems = productsInCart.map<PaymentItem>((e){
+      return PaymentItem(amount: e["product"].price.toString(),label: e['product'].title.toString(),);
+    }).toList();
+    print(paymentItems?.last.amount);
     notifyListeners();
   }
 }
