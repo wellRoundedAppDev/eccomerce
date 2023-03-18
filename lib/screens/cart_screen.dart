@@ -20,24 +20,45 @@ class CartScreen extends StatelessWidget {
           child:
           Consumer<CartProvider>(
             builder: (context,cartProvider,child){
-              return GooglePayButton(
+              return Row(
+                children: [
+                  Expanded(
+                    child: GooglePayButton(
 
-                onError: (e){
-                  print(e);
-                },
-                onPressed: (){
-                  context.read<CartProvider>().createPaymentItems();
-                },
-                paymentConfigurationAsset:  "pay_config/gpay.json",
-                paymentItems: cartProvider.paymentItems??[],
-                type: GooglePayButtonType.pay,
-                margin: const EdgeInsets.only(top: 15.0),
-                onPaymentResult: (data){
-                  print(data);
-                },
-                loadingIndicator: const Center(
-                  child: CircularProgressIndicator(),
-                ),
+                      onError: (e){
+                        print(e);
+                      },
+                      onPressed: (){
+                        context.read<CartProvider>().createPaymentItems();
+                      },
+                      paymentConfigurationAsset:  "pay_config/gpay.json",
+                      paymentItems: cartProvider.paymentItems??[],
+                      type: GooglePayButtonType.pay,
+                      margin: const EdgeInsets.only(top: 15.0),
+                      onPaymentResult: (data){
+                        print(data);
+                      },
+                      loadingIndicator: const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: ApplePayButton(
+               paymentConfigurationAsset:"pay_config/apple_pay.json" ,
+                      paymentItems: cartProvider.paymentItems??[],
+                      style: ApplePayButtonStyle.black,
+                      type: ApplePayButtonType.buy,
+                      margin: const EdgeInsets.only(top: 15.0),
+                      onPaymentResult: (data){
+                        print(data);
+                      },
+                      loadingIndicator: const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                  ),
+                ],
               );
             },
           ),
