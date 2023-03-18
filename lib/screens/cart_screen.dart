@@ -3,42 +3,67 @@ import 'package:ecommerce_flogics/constants/font_sizes/font_sizes.dart';
 import 'package:ecommerce_flogics/providers/cart_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pay/pay.dart';
 import 'package:provider/provider.dart';
 
 import '../constants/strings.dart';
 import '../shared_widgets/primary_button.dart';
 
 class CartScreen extends StatelessWidget {
-  const CartScreen({Key? key}) : super(key: key);
-
+   CartScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.only(left: 8, bottom: 8, right: 8),
-          child: PrimaryButton(
-              text: Strings.PROCEED_TO_CHECKOUT_ENG, action: () {
-                context.read<CartProvider>().calculateCartTotalPrice();
-                double totalPrice = context.read<CartProvider>().totalCartPrice;
-                showDialog(context: context, builder: (context){
-                 return AlertDialog(title: Text("Total Price"),
-                   actions: [
+          child:
+          Consumer<CartProvider>(
+            builder: (context,cartProvider,child){
+              return GooglePayButton(
 
-                   GestureDetector(
-                     onTap: (){
-                       Navigator.pop(context);
-                     },
-                     child: Padding(
-                       padding: const EdgeInsets.all(8.0),
-                       child: Text("Buy",style: TextStyle(fontWeight: FontWeight.bold,fontSize: FontSizes.FONT_SIZE_22,color: AppColors.APP_MAIN_COLOR),),
-                     ),
-                   )
-                  ],content: Text(totalPrice.toString()),
-                 );
-                });
+                onError: (e){
+                  print(e);
+                },
+                onPressed: (){
+                  context.read<CartProvider>().createPaymentItems();
+                },
+                paymentConfigurationAsset:  "pay_config/gpay.json",
+                paymentItems: cartProvider.paymentItems??[],
+                type: GooglePayButtonType.pay,
+                margin: const EdgeInsets.only(top: 15.0),
+                onPaymentResult: (data){
+                  print(data);
+                },
+                loadingIndicator: const Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            },
+          ),
 
-          }),
+          // PrimaryButton(
+          //     text: Strings.PROCEED_TO_CHECKOUT_ENG, action: () {
+          //       context.read<CartProvider>().calculateCartTotalPrice();
+          //       double totalPrice = context.read<CartProvider>().totalCartPrice;
+          //       showDialog(context: context, builder: (context){
+          //        return AlertDialog(title: Text("Total Price"),
+          //          actions: [
+          //
+          //          GestureDetector(
+          //            onTap: (){
+          //              Navigator.pop(context);
+          //            },
+          //            child: Padding(
+          //              padding: const EdgeInsets.all(8.0),
+          //              child: Text("Buy",style: TextStyle(fontWeight: FontWeight.bold,fontSize: FontSizes.FONT_SIZE_22,color: AppColors.APP_MAIN_COLOR),),
+          //            ),
+          //          )
+          //         ],content: Text(totalPrice.toString()),
+          //        );
+          //       });
+          //
+          // }),
         ),
         body: Consumer<CartProvider>(
           builder: (context, cartProvider, child) {

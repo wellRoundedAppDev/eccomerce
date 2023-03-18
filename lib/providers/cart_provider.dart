@@ -4,6 +4,7 @@ import 'package:ecommerce_flogics/models/user_cart_response.dart';
 import 'package:ecommerce_flogics/providers/products_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pay/pay.dart';
 import 'package:provider/provider.dart';
 
 class CartProvider extends ChangeNotifier {
@@ -62,6 +63,15 @@ class CartProvider extends ChangeNotifier {
       totalCartPrice += element["product"].price * element["quantity"];
     });
     print(totalCartPrice);
+    notifyListeners();
+  }
+
+  List<PaymentItem>? paymentItems;
+  createPaymentItems(){
+    paymentItems = productsInCart.map<PaymentItem>((e){
+      return PaymentItem(amount: e["product"].price.toString(),label: e['product'].title.toString(),);
+    }).toList();
+    print(paymentItems?.last.amount);
     notifyListeners();
   }
 }
