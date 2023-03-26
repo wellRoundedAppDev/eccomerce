@@ -10,81 +10,82 @@ import '../constants/strings.dart';
 import '../shared_widgets/primary_button.dart';
 
 class CartScreen extends StatelessWidget {
-   CartScreen({Key? key}) : super(key: key);
+  CartScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        bottomNavigationBar: Padding(
+        bottomNavigationBar:
+        Padding(
           padding: const EdgeInsets.only(left: 8, bottom: 8, right: 8),
           child:
-          Consumer<CartProvider>(
-            builder: (context,cartProvider,child){
-              return Row(
-                children: [
-                  Expanded(
-                    child: GooglePayButton(
+          // Consumer<CartProvider>(
+          //   builder: (context, cartProvider, child) {
+          //     return
+          //       Row(
+          //       children: [
+          //         Expanded(
+          //           child: GooglePayButton(
+          //             onError: (e) {
+          //               print(e);
+          //             },
+          //             onPressed: () {
+          //               context.read<CartProvider>().createPaymentItems();
+          //             },
+          //             paymentConfigurationAsset: "pay_config/gpay.json",
+          //             paymentItems: cartProvider.paymentItems ?? [],
+          //             type: GooglePayButtonType.pay,
+          //             margin: const EdgeInsets.only(top: 15.0),
+          //             onPaymentResult: (data) {
+          //               print(data);
+          //             },
+          //             loadingIndicator: const Center(
+          //               child: CircularProgressIndicator(),
+          //             ),
+          //           ),
+          //         ),
+          //         Expanded(
+          //           child: ApplePayButton(
+          //             paymentConfigurationAsset: "pay_config/apple_pay.json",
+          //             paymentItems: cartProvider.paymentItems ?? [],
+          //             style: ApplePayButtonStyle.black,
+          //             type: ApplePayButtonType.buy,
+          //             margin: const EdgeInsets.only(top: 15.0),
+          //             onPaymentResult: (data) {
+          //               print(data);
+          //             },
+          //             loadingIndicator: const Center(
+          //               child: CircularProgressIndicator(),
+          //             ),
+          //           ),
+          //         ),
+          //       ],
+          //     );
+          //   },
+          // ),
 
-                      onError: (e){
-                        print(e);
-                      },
-                      onPressed: (){
-                        context.read<CartProvider>().createPaymentItems();
-                      },
-                      paymentConfigurationAsset:  "pay_config/gpay.json",
-                      paymentItems: cartProvider.paymentItems??[],
-                      type: GooglePayButtonType.pay,
-                      margin: const EdgeInsets.only(top: 15.0),
-                      onPaymentResult: (data){
-                        print(data);
-                      },
-                      loadingIndicator: const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: ApplePayButton(
-               paymentConfigurationAsset:"pay_config/apple_pay.json" ,
-                      paymentItems: cartProvider.paymentItems??[],
-                      style: ApplePayButtonStyle.black,
-                      type: ApplePayButtonType.buy,
-                      margin: const EdgeInsets.only(top: 15.0),
-                      onPaymentResult: (data){
-                        print(data);
-                      },
-                      loadingIndicator: const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    ),
-                  ),
-                ],
-              );
-            },
-          ),
+          PrimaryButton(
+              text: Strings.PROCEED_TO_CHECKOUT_ENG, action: () {
+                context.read<CartProvider>().calculateCartTotalPrice();
+                double totalPrice = context.read<CartProvider>().totalCartPrice;
+                showDialog(context: context, builder: (context){
+                 return AlertDialog(title: Text("Total Price"),
+                   actions: [
 
-          // PrimaryButton(
-          //     text: Strings.PROCEED_TO_CHECKOUT_ENG, action: () {
-          //       context.read<CartProvider>().calculateCartTotalPrice();
-          //       double totalPrice = context.read<CartProvider>().totalCartPrice;
-          //       showDialog(context: context, builder: (context){
-          //        return AlertDialog(title: Text("Total Price"),
-          //          actions: [
-          //
-          //          GestureDetector(
-          //            onTap: (){
-          //              Navigator.pop(context);
-          //            },
-          //            child: Padding(
-          //              padding: const EdgeInsets.all(8.0),
-          //              child: Text("Buy",style: TextStyle(fontWeight: FontWeight.bold,fontSize: FontSizes.FONT_SIZE_22,color: AppColors.APP_MAIN_COLOR),),
-          //            ),
-          //          )
-          //         ],content: Text(totalPrice.toString()),
-          //        );
-          //       });
-          //
-          // }),
+                   GestureDetector(
+                     onTap: (){
+                       Navigator.pop(context);
+                     },
+                     child: Padding(
+                       padding: const EdgeInsets.all(8.0),
+                       child: Text("Buy",style: TextStyle(fontWeight: FontWeight.bold,fontSize: FontSizes.FONT_SIZE_22,color: AppColors.APP_MAIN_COLOR),),
+                     ),
+                   )
+                  ],content: Text(totalPrice.toString()),
+                 );
+                });
+
+          }),
         ),
         body: Consumer<CartProvider>(
           builder: (context, cartProvider, child) {
